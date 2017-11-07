@@ -1,0 +1,20 @@
+{% load static %}
+{% load arya_form %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="{% static 'arya/plugins/bootstrap/css/bootstrap.css' %}"/>
+    <link rel="stylesheet" href="{% static 'arya/css/commons.css' %}"/>
+    {% block css %}{% endblock %}
+</head>
+<body>
+
+<div class="container">
+    <h3>添加数据</h3>
+    {% show_form form %}
+</div>
+
+</body>
+</html>

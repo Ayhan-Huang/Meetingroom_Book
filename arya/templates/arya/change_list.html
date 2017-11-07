@@ -1,0 +1,126 @@
+{% extends 'arya/layout.html' %}
+{% load arya_list %}
+
+
+{% block css %}
+    <style>
+        .row {
+            margin: 5px 15px;
+        }
+
+        .comb-filter .row .whole {
+            width: 60px;
+            float: left;
+
+        }
+
+        .comb-filter .row .others {
+            padding-left: 60px;
+        }
+
+        .comb-filter .row a {
+            display: inline-block;
+            padding: 5px 8px;
+            margin: 3px;
+            border: 1px solid #d4d4d4;
+
+        }
+
+        .comb-filter .row a {
+            display: inline-block;
+            padding: 5px 8px;
+            margin: 3px;
+            border: 1px solid #d4d4d4;
+        }
+
+        .comb-filter a.active {
+            color: #fff;
+            background-color: #337ab7;
+            border-color: #2e6da4;
+        }
+    </style>
+{% endblock %}
+
+{% block breadcrumb %}
+    <ol class="breadcrumb">
+        <li><a href="#">首页</a></li>
+        <li class="active">数据列表</li>
+    </ol>
+{% endblock %}
+
+
+{% block content %}
+
+    <div>
+        {% if cl.list_filter %}
+            <div class="comb-filter">
+                {% for row in cl.gen_list_filter %}
+                    <div class="row">
+                        {% for col in row %}
+                            {{ col }}
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+    <div class="row">
+{#         <div class="col-md-3 col-md-offset-6">#}
+                {% if cl.list_search %}
+                    <form method="get">
+                    <!-- 将method设置为get，查询条件将以查询字符串的方式发送到后台，并且可以配合组合过滤 -->
+                    <input type="text" class="form-control" placeholder="请输入关键字" style="width: 200px; display: inline-block"
+                           name="{{ cl.model_config.search_key }}" {% if cl.model_config.search_val %} value="{{ cl.model_config.search_val }}" {% else %} value="" {% endif %}>
+                        <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span></button>
+                    </form>
+                {% endif %}
+            </div>
+
+    </div>
+    
+    
+        <form method="post" class="form-horizontal">
+            {% csrf_token %}
+            <div class="row">
+
+                <!-- 定制Action 开始 -->
+                {% if cl.actions %}
+                    {% show_actions cl %}
+                {% endif %}
+                <!-- 定制Action 结束 -->
+
+
+                <!-- 添加按钮 开始 -->
+                {% if cl.show_add_btn %}
+                    {{ cl.add_html }}
+                {% endif %}
+                <!-- 添加按钮 结束 -->
+            </div>
+            <div class="row">
+                <!-- 数据表格 -->
+                {% show_result_list cl %}
+                <div style="text-align: right">
+                    <ul class="pagination" style="margin: 0;">
+                        {{ cl.pager.page_html|safe }}
+                    </ul>
+                </div>
+            </div>
+
+        </form>
+
+    </div>
+
+
+{% endblock %}
+
+{% block js %}
+    <script>
+        $(function () {
+            $('#headCheckBox').click(function () {
+                $(this).parent().parent().parent().next().find(':checkbox').prop('checked', $(this).prop('checked'));
+            })
+
+        })
+
+    </script>
+{% endblock %}
